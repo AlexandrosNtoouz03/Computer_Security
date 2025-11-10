@@ -1,0 +1,15 @@
+[
+  {
+    "username": "test",
+    "salt": "IcnuuZhWOQATiwJxWxT/vg==",
+    "password_hash": "3bDwsjiX7P3h7veQhCuqdICL3n69RWO5SxxAAwFHXVL44s4mr/yQPlzgnC+pfz93GJ2LFDJ2HofMQF7h/SQt4g==",
+    "n": 16384,
+    "r": 8,
+    "p": 1,
+    "dklen": 64,
+    "clearance": "internal",
+    "roles": [
+      "reader"
+    ]
+  }
+]

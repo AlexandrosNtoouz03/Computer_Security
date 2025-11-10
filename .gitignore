@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environment
+.venv/
+.env/
+venv/
+.idea/
+.vscode/
+
+# Runtime
+audit.jsonl
+*.log
+
+# Keys
+server/ssh_host_ed25519_key
+server/ssh_host_ed25519_key.pub
