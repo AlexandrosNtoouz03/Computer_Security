@@ -1,0 +1,6 @@
+{
+  "test": ["reader"],
+  "admin": ["admin"],
+  "editor": ["editor"],
+  "guest": ["guest"]
+}

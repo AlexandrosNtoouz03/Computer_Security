@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import asyncio, asyncssh, os, struct, stat
 import logging, traceback
+from server.policy import authorize
 
 # Console debug logging for AsyncSSH
 logging.basicConfig(
@@ -114,6 +115,7 @@ class SFTPSession(asyncssh.SSHServerSession):
         self.handles = Handles()
         self.initialized = False
         self._sftp_ok = False
+        self._username = None  # Track authenticated user for authorization
 
     # Ensure the channel uses *binary* I/O from the start
     def connection_made(self, chan):
@@ -166,6 +168,19 @@ class SFTPSession(asyncssh.SSHServerSession):
             p_u32(req_id) + p_u32(code) + p_str(msg) + p_str(b"")
         ))
 
+    def _check_authorization(self, operation: str, path: str) -> bool:
+        """Check if the current user is authorized for the operation on the given path"""
+        if not self._username:
+            print(f"[AUTH] No authenticated user for {operation} on {path}")
+            return False
+        
+        # Convert SFTP path to canonical form for authorization
+        canonical_path = canon_sftp_path(path) if isinstance(path, bytes) else path
+        authorized = authorize(self._username, operation, canonical_path)
+        
+        print(f"[AUTH] User '{self._username}' {operation} '{canonical_path}': {'ALLOWED' if authorized else 'DENIED'}")
+        return authorized
+
     def _handle(self, pkt: bytes):
         ptype = pkt[0]
         payload = pkt[1:]
@@ -196,6 +211,12 @@ class SFTPSession(asyncssh.SSHServerSession):
             if ptype == SSH_FXP_REALPATH:
                 path, off = ustr(payload, off)
                 canon = canon_sftp_path(path)  # "./telnet.txt" -> "/telnet.txt"
+                
+                # Check authorization for path resolution
+                if not self._check_authorization("realpath", canon):
+                    self._send_status(req_id, SSH_FX_PERMISSION_DENIED, b"access denied")
+                    return
+                
                 try:
                     full = safe_join(JAIL_ROOT, path)
                     # Debug every REALPATH, not just "."
@@ -217,6 +238,13 @@ class SFTPSession(asyncssh.SSHServerSession):
 
             elif ptype in (SSH_FXP_STAT, SSH_FXP_LSTAT):
                 path, off = ustr(payload, off)
+                canon = canon_sftp_path(path)
+                
+                # Check authorization for stat operations
+                if not self._check_authorization("stat", canon):
+                    self._send_status(req_id, SSH_FX_PERMISSION_DENIED, b"access denied")
+                    return
+                
                 full = safe_join(JAIL_ROOT, path)
                 try:
                     st = os.lstat(full) if ptype == SSH_FXP_LSTAT else os.stat(full)
@@ -229,6 +257,13 @@ class SFTPSession(asyncssh.SSHServerSession):
 
             elif ptype == SSH_FXP_OPENDIR:
                 path, off = ustr(payload, off)
+                canon = canon_sftp_path(path)
+                
+                # Check authorization for directory listing
+                if not self._check_authorization("opendir", canon):
+                    self._send_status(req_id, SSH_FX_PERMISSION_DENIED, b"access denied")
+                    return
+                
                 full = safe_join(JAIL_ROOT, path)
                 entries = list(os.scandir(full))
                 handle = self.handles.add(DirHandle(entries))
@@ -241,6 +276,8 @@ class SFTPSession(asyncssh.SSHServerSession):
                     self._send_status(req_id, SSH_FX_FAILURE, b"bad dir handle")
                     return
 
+                # Note: We assume OPENDIR already checked authorization for the directory
+                # READDIR continues reading an already-authorized directory handle
                 batch = dh.entries[dh.idx: dh.idx + 64]
                 dh.idx += len(batch)
                 if not batch:
@@ -260,6 +297,13 @@ class SFTPSession(asyncssh.SSHServerSession):
             elif ptype == SSH_FXP_MKDIR:
                 path, off = ustr(payload, off)
                 off = parse_attrs_ignore(payload, off)  # ignore attrs (mode, etc.)
+                canon = canon_sftp_path(path)
+                
+                # Check authorization for directory creation
+                if not self._check_authorization("mkdir", canon):
+                    self._send_status(req_id, SSH_FX_PERMISSION_DENIED, b"access denied")
+                    return
+                
                 try:
                     full = safe_join(JAIL_ROOT, path)  # map "/demo" -> <jail>\demo
                     # Debug (optional): print to console so you can see the resolved path
@@ -282,9 +326,21 @@ class SFTPSession(asyncssh.SSHServerSession):
                 filename, off = ustr(payload, off)
                 pflags, off = u32(payload, off)
                 off = parse_attrs_ignore(payload, off)  # ignore attrs
+                
+                canon = canon_sftp_path(filename)
+                
+                # Determine operation type based on flags for authorization
+                if pflags & (PF_WRITE | PF_CREAT | PF_TRUNC):
+                    operation = "write"  # Writing, creating, or truncating
+                else:
+                    operation = "read"   # Read-only access
+                
+                # Check authorization for file access
+                if not self._check_authorization(operation, canon):
+                    self._send_status(req_id, SSH_FX_PERMISSION_DENIED, b"access denied")
+                    return
 
                 full = safe_join(JAIL_ROOT, filename)
-
 
                 print(f"[FXP_OPEN] request: {filename!r} -> full: {full}")
                 # Map SFTP pflags to Python open() modes
@@ -321,6 +377,8 @@ class SFTPSession(asyncssh.SSHServerSession):
                     self._send_status(req_id, SSH_FX_FAILURE, b"bad file handle")
                     return
 
+                # Note: Authorization was already checked during SSH_FXP_OPEN
+                # The file handle represents an already-authorized operation
                 f.seek(offset)
                 f.write(data)
                 f.flush()
@@ -336,6 +394,8 @@ class SFTPSession(asyncssh.SSHServerSession):
                     self._send_status(req_id, SSH_FX_FAILURE, b"bad file handle")
                     return
 
+                # Note: Authorization was already checked during SSH_FXP_OPEN
+                # The file handle represents an already-authorized operation
                 f.seek(offset)
                 data = f.read(length)
                 if data is None or len(data) == 0:
@@ -361,10 +421,14 @@ class SFTPSession(asyncssh.SSHServerSession):
 
 # --- Password auth implemented on the server class (no keyword args needed) ---
 def validate_user_password(username, password):
-    # TODO: replace with Argon2 verify, lockout, rate-limits, audit, salted, peppered, perhaps, mfa?
-    return username == "bob" and password == "test"
+    # Use the real authentication system from auth.py
+    from server.auth import authenticate
+    return authenticate(username, password)
 
 class Server(asyncssh.SSHServer):
+    def __init__(self):
+        self._authenticated_username = None
+    
     # Tell AsyncSSH we will do user auth:
     def begin_auth(self, username):  # called when a new user starts auth
         return True  # start authentication
@@ -373,10 +437,15 @@ class Server(asyncssh.SSHServer):
         return True
 
     def validate_password(self, username, password):
-        return validate_user_password(username, password)
+        is_valid = validate_user_password(username, password)
+        if is_valid:
+            self._authenticated_username = username
+        return is_valid
 
     def session_requested(self):
-        return SFTPSession()
+        session = SFTPSession()
+        session._username = self._authenticated_username  # Pass authenticated user to session
+        return session
 
 async def main():
     os.makedirs(JAIL_ROOT, exist_ok=True)

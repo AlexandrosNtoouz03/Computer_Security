@@ -1,0 +1,6 @@
+path,owner,permissions
+/,test,rwx
+/public,test,rwx
+/private,test,rwx
+/shared,test,rwx
+/documents,test,rwx

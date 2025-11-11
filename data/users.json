@@ -1,15 +1,42 @@
 [
   {
     "username": "test",
-    "salt": "IcnuuZhWOQATiwJxWxT/vg==",
-    "password_hash": "3bDwsjiX7P3h7veQhCuqdICL3n69RWO5SxxAAwFHXVL44s4mr/yQPlzgnC+pfz93GJ2LFDJ2HofMQF7h/SQt4g==",
+    "salt": "qAvk+7RWPcsyvPRffGetIw==",
+    "password_hash": "6VVLIcMeETOyz+V+BdDQOrYPSzqMrf0VDkUmthx4kz0jM47OyLCGUD7Z7ZDx6qyGDvPW7oZoT/UiDG+PxEwpTQ==",
     "n": 16384,
     "r": 8,
     "p": 1,
     "dklen": 64,
-    "clearance": "internal",
-    "roles": [
-      "reader"
-    ]
+    "clearance": "internal"
+  },
+  {
+    "username": "admin",
+    "salt": "WkSUyAdIS/nSinajhAVUQw==",
+    "password_hash": "WkiKKdiQHllJwRvEbV33bFYlhrZQ/g5Xscr+6wy9lesPV//llTuq667MjzgUSr++P0myGJf4iNlDmq8Af2G7PQ==",
+    "n": 16384,
+    "r": 8,
+    "p": 1,
+    "dklen": 64,
+    "clearance": "secret"
+  },
+  {
+    "username": "editor",
+    "salt": "TdKisPHRXdfQztcT4y0m9w==",
+    "password_hash": "YwZlgSC+511c1F0DKuH1rkVA/Ki6Jp49ckPlYcKe+w7hVZZfyZvXX87uG82qVDX6ym9njchn3mXuJjVmv0VEDQ==",
+    "n": 16384,
+    "r": 8,
+    "p": 1,
+    "dklen": 64,
+    "clearance": "confidential"
+  },
+  {
+    "username": "guest",
+    "salt": "qXnrS1eGPPeMgpifl7Qxtw==",
+    "password_hash": "S/1+Pe3DlNK1ARjmCYVXdTn1HBWH1TB22EjnJzlek2WM3cLNE+7+lALKVh+EHMrlLMI9R6jgpTKD+kLd4Mh5Zw==",
+    "n": 16384,
+    "r": 8,
+    "p": 1,
+    "dklen": 64,
+    "clearance": "unclassified"
   }
 ]

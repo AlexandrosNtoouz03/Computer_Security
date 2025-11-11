@@ -1,0 +1,17 @@
+{
+  "paths": {
+    "/": "unclassified",
+    "/public": "unclassified",
+    "/internal": "internal",
+    "/confidential": "confidential",
+    "/secret": "secret",
+    "/private": "confidential"
+  },
+  "clearance_hierarchy": {
+    "unclassified": 0,
+    "internal": 1,
+    "confidential": 2,
+    "secret": 3,
+    "top_secret": 4
+  }
+}
