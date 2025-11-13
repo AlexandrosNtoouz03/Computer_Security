@@ -4,3 +4,5 @@ path,owner,permissions
 /private,test,rwx
 /shared,test,rwx
 /documents,test,rwx
+/secret,admin,r--
+/secret/flag.txt,admin,r--

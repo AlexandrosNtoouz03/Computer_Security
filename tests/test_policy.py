@@ -5,6 +5,7 @@ import pytest
 import tempfile
 import os
 from server import policy
+import pathlib
 
 @pytest.fixture
 def temp_audit_log(tmp_path, monkeypatch):
@@ -138,3 +139,69 @@ def test_individual_model_checks():
         assert isinstance(allowed, bool)
         assert isinstance(reason, str)
         assert len(reason) > 0
+
+
+def test_traversal_like_path_documented():
+    """
+    Traversal-style paths like '/../secret' are blocked by the jail (safe_join)
+    layer in the SFTP server, not by the authorization policy itself.
+    This test just documents that authorize() still behaves consistently.
+    """
+    user = "test"
+    op = "read"
+    path = "/../secret"
+
+    allowed = policy.authorize(user, op, path)
+
+    # We only assert that it returns a boolean; actual traversal protection
+    # is tested at the SFTP/jail level, not here.
+    assert isinstance(allowed, bool)
+import json
+import os
+
+
+def test_authorize_writes_audit_record(tmp_path, monkeypatch):
+    """authorize() must append an audit record with correct fields in audit.jsonl."""
+
+    # Clear cache to avoid stale state
+    if hasattr(policy, "clear_cache"):
+        policy.clear_cache()
+
+    user = "test"
+    op = "read"
+    path = "/"
+
+    allowed = policy.authorize(user, op, path)
+    assert isinstance(allowed, bool)
+
+    # audit.jsonl is written in the project root (same as test_audit_log_created)
+    audit_file = pathlib.Path("audit.jsonl")
+    assert audit_file.exists(), "audit.jsonl should be created by authorize()"
+
+    # Parse the last audit record
+    lines = audit_file.read_text().strip().splitlines()
+    assert len(lines) >= 1, "At least one audit entry should be written"
+
+    last = json.loads(lines[-1])
+
+    # Required fields
+    assert last["user"] == user
+    assert last["op"] == op
+    assert last["path"] == path
+    assert "allowed" in last
+    assert "reason" in last
+    # timestamp is expected but we allow flexibility in key name
+    assert "timestamp" in last or "ts" in last
+    
+    
+def test_flag_access_only_admin():
+    """Only admin should be allowed to read the CTF flag."""
+    path = "/secret/flag.txt"
+
+    # Non-admin users should be denied
+    for user in ["test", "guest", "reader", "editor"]:
+        allowed = policy.authorize(user, "read", path)
+        assert allowed is False, f"Non-admin user '{user}' must not be able to read the flag"
+
+    # Admin should be allowed
+    assert policy.authorize("admin", "read", path) is True

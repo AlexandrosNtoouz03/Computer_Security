@@ -5,6 +5,8 @@ Commands: pwd, ls, get, put, mkdir, stat, exit
 import asyncio, asyncssh, sys, os
 from pathlib import Path
 
+KNOWN_HOSTS_FILE = os.path.join(os.path.dirname(__file__), "known_hosts")
+
 class SFTPClient:
     def __init__(self, sftp):
         self.sftp = sftp
@@ -176,8 +178,13 @@ async def main(host="127.0.0.1", port=2222, username="test", password="test"):
     print(f"👤 Username: {username}")
     
     try:
-        async with asyncssh.connect(host, port=port, username=username, password=password, 
-                                  known_hosts=None) as conn:
+        async with asyncssh.connect(
+            host,
+            port=port,
+            username=username,
+            password=password,
+            known_hosts=KNOWN_HOSTS_FILE,
+        ) as conn:
             print("✅ Connected successfully!")
             
             async with conn.start_sftp_client() as sftp:
@@ -198,4 +205,3 @@ if __name__ == "__main__":
         asyncio.run(main(*sys.argv[1:]))
     except (KeyboardInterrupt, SystemExit):
         pass
-

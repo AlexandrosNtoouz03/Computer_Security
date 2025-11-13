@@ -56,14 +56,15 @@ This project demonstrates advanced security principles through:
 - **Roles**: admin, editor, reader, guest
 - **Operations**: read, write, create, mkdir, delete
 
-## 👥 **User Accounts**
+## **User Accounts**
 
-| User   | Password | Clearance     | Role   | Can Read           | Can Write          |
-|--------|----------|---------------|--------|--------------------|-------------------|
-| test   | test     | internal      | reader | /, /internal       | None (reader)     |
-| admin  | admin    | secret        | admin  | All levels         | All levels        |
-| editor | editor   | confidential  | editor | Up to confidential | Up to confidential|
-| guest  | guest    | unclassified  | guest  | /public only       | None              |
+| Username | Clearance    | Roles          | Intended powers / limits                                       |
+|----------|--------------|----------------|-----------------------------------------------------------------|
+| admin    | secret       | admin          | Full read/write/create/delete across the jail                  |
+| editor   | internal     | editor         | Read/write/mkdir in non-confidential areas, no delete          |
+| reader   | internal     | reader         | Read-only, no write/create/delete                              |
+| guest    | unclassified | guest          | Read-only in /public only, no internal/confidential/secret     |
+| test     | internal     | reader (etc.)  | Used for tests as documented                                   |
 
 ## 🚀 **Quick Start**
 

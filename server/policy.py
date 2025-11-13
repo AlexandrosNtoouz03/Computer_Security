@@ -248,6 +248,28 @@ def _audit(user, op, path, allowed, reason):
     except Exception as e:
         print(f"Failed to write audit log: {e}")
 
+def warmup():
+    """Load all policy files on startup and log success/failure."""
+    try:
+        _load_users()
+        print("[policy] Loaded users.json")
+
+        _load_user_roles()
+        print("[policy] Loaded user_roles.json")
+
+        _load_role_permissions()
+        print("[policy] Loaded role_perms.csv")
+
+        _load_mac_labels()
+        print("[policy] Loaded mac_labels.json")
+
+        _load_dac_owners()
+        print("[policy] Loaded dac_owners.csv")
+
+        print("[policy] All policy files loaded successfully.")
+    except Exception as e:
+        print(f"[policy] ERROR loading policy data: {e}")
+        raise
 def clear_cache():
     """Clear the data cache - useful for testing or reloading config"""
     global _data_cache

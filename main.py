@@ -2,6 +2,7 @@
 import asyncio, asyncssh, os, struct, stat
 import logging, traceback
 from server.policy import authorize
+from server import policy
 
 # Console debug logging for AsyncSSH
 logging.basicConfig(
@@ -449,6 +450,8 @@ class Server(asyncssh.SSHServer):
 
 async def main():
     os.makedirs(JAIL_ROOT, exist_ok=True)
+    print("Initializing policy engine...")
+    policy.warmup()
     print(f"Jail root: {JAIL_ROOT}")
     await asyncssh.listen(
         LISTEN_HOST, LISTEN_PORT,
