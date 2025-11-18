@@ -78,24 +78,19 @@ pip install -r requirements.txt
 # - pytest (testing framework)
 ```
 
-### **Option 1: Interactive Setup**
+### **Option 1: Start the Server**
 
-#### **Interactive Server Launcher**
+#### **To launch the SFTP server:**
 ```bash
-python start_server.py
+python main.py
 ```
-- Prompts for host, port, SSH key path, jail root directory
-- Shows available user accounts
-- Generates SSH key if needed
-- Confirms settings before starting
+Starts the SFTP server using the default configuration and the included SSH host key
 
-#### **Interactive Client Launcher**
+#### **Start the client**
 ```bash
 python start_client.py
 ```
-- Prompts for server details and credentials
-- Shows available test accounts
-- Displays connection summary and available commands
+Connects to the running SFTP server and provides the interactive command interface
 
 ### **Option 2: Direct Launch**
 
