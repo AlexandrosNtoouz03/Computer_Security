@@ -1,6 +1,8 @@
 {
   "test": ["reader"],
   "admin": ["admin"],
-  "editor": ["editor"],
-  "guest": ["guest"]
+  "alice": ["editor"],
+  "bob": ["reader"],
+  "charlie": ["guest"],
+  "demo": ["guest"]
 }

@@ -1,0 +1,36 @@
+# Manifest file for packaging
+# Includes all necessary files for the Computer Security SFTP project
+
+# Documentation files
+include README.md
+
+# Configuration and requirements
+include requirements.txt
+
+# Data files
+recursive-include data *.json *.csv
+
+# SSH keys (if they exist)
+include ssh_host_ed25519_key*
+
+# Main application
+include main.py
+
+# Server components
+recursive-include server *.py
+
+# Client components  
+recursive-include client *.py
+
+# Test files
+recursive-include tests *.py
+
+# Exclude runtime and cache files
+exclude audit.jsonl
+exclude *.log
+global-exclude __pycache__
+global-exclude *.py[co]
+global-exclude *.so
+global-exclude .DS_Store
+global-exclude *.egg-info
+global-exclude .pytest_cache

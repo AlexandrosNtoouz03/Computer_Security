@@ -1,42 +1,118 @@
 [
   {
+    "salt": "qm5VP3+ltvRX3ULFr7xRf+v3zXOQtDkCjwpQ3IA9Qzw=",
+    "password_hash": "moFhNFJsUwTORk+fNde5uHR4SN5PxvnSyoH+U/8QOqlSX1i+drXARN/Ofl4lV0gYmFUqbwVozNI7qdLBl7tmgg==",
+    "n": 16384,
+    "r": 8,
+    "p": 1,
+    "dklen": 64,
     "username": "test",
-    "salt": "qAvk+7RWPcsyvPRffGetIw==",
-    "password_hash": "6VVLIcMeETOyz+V+BdDQOrYPSzqMrf0VDkUmthx4kz0jM47OyLCGUD7Z7ZDx6qyGDvPW7oZoT/UiDG+PxEwpTQ==",
+    "clearance": "internal",
+    "is_honeypot": false
+  },
+  {
+    "salt": "QVzqcrLd0pjqa0nUisQ1ZPsOTNNmy5HEJV/YEdOKTW0=",
+    "password_hash": "vvl5EAuY8s3VYp2yqsqvQDa3VHglz7G/4IiNzlmRHKhfN7hG7tLs+LMvOAzQcx5kJ64DlWAZj/4mPcdVd0L4CA==",
     "n": 16384,
     "r": 8,
     "p": 1,
     "dklen": 64,
-    "clearance": "internal"
-  },
-  {
     "username": "admin",
-    "salt": "WkSUyAdIS/nSinajhAVUQw==",
-    "password_hash": "WkiKKdiQHllJwRvEbV33bFYlhrZQ/g5Xscr+6wy9lesPV//llTuq667MjzgUSr++P0myGJf4iNlDmq8Af2G7PQ==",
+    "clearance": "secret",
+    "is_honeypot": false
+  },
+  {
+    "salt": "Rit9/T5i648LKCeCYsq9Ardv4Tnuh4I7FjE4PBzoM+E=",
+    "password_hash": "HSRXTQ3ZsA7fxR++MebrwRpCzi393g8WK6EGq9dk5idUzYWD+X6q8VyelMoBoYS6UkjqrQEHcH7UaC9frjxcMA==",
     "n": 16384,
     "r": 8,
     "p": 1,
     "dklen": 64,
-    "clearance": "secret"
+    "username": "alice",
+    "clearance": "confidential",
+    "is_honeypot": false
   },
   {
-    "username": "editor",
-    "salt": "TdKisPHRXdfQztcT4y0m9w==",
-    "password_hash": "YwZlgSC+511c1F0DKuH1rkVA/Ki6Jp49ckPlYcKe+w7hVZZfyZvXX87uG82qVDX6ym9njchn3mXuJjVmv0VEDQ==",
+    "salt": "HZ0sgrQyIx0W+nw5jpPSPQdYEQBOpYUAzDOq2TRizhg=",
+    "password_hash": "9fUNKO/ERu4lrJoEALX1GM6RmXK24rNnIueyBYXpna4mzMWzvljwLaXK+M3lJFDaWoCt3zZqgGdWwyRNEm7lKQ==",
     "n": 16384,
     "r": 8,
     "p": 1,
     "dklen": 64,
-    "clearance": "confidential"
+    "username": "bob",
+    "clearance": "internal",
+    "is_honeypot": false
   },
   {
+    "salt": "Kc1/26lWpyRghdnQpWyqMl/8wrBgGiajCFR1mL1PyOw=",
+    "password_hash": "CUh2VM41+hePEgKv2yW4pCtBixtBdTEVTROQY/1EHphdjaGfzdGB4Rj43YrbPXysYs7asXBwYFcMZtXQYcZfPA==",
+    "n": 16384,
+    "r": 8,
+    "p": 1,
+    "dklen": 64,
+    "username": "charlie",
+    "clearance": "unclassified",
+    "is_honeypot": false
+  },
+  {
+    "salt": "CelJloHg4NZgPLtuiKhGNWkjtocIxxaUZKuSaf0wboA=",
+    "password_hash": "NrCVycUL8XppvnT2E9iZk6JVH8HQTxNnrEW4irvL8zzaa7ig7IEuiIYKG4li/2CJh/5S/KVn6wO/Z4kRP0gbPw==",
+    "n": 16384,
+    "r": 8,
+    "p": 1,
+    "dklen": 64,
+    "username": "demo",
+    "clearance": "unclassified",
+    "is_honeypot": false
+  },
+  {
+    "salt": "fjKD4WZcs+fEFMaekFfXMPKE/v/WWM87GGq9Qh+GvAw=",
+    "password_hash": "NVZEd1bp2eDdYH3klSJ8k8skGD5q979E3EU9TPMSLPG559OJipuPdzhezW+w/V0SuMIpRQ8GFnuGBCJHFd5LlQ==",
+    "n": 16384,
+    "r": 8,
+    "p": 1,
+    "dklen": 64,
+    "username": "root",
+    "is_honeypot": true
+  },
+  {
+    "salt": "DWBoR2nAnaWzaj8bPUCpW2YoCfeUZpfu+FAQnFq6lwA=",
+    "password_hash": "Me/iU9QhRgBEb5GUTXv2i8/QXUccAp9q4WHv6XA+hXN3sfsiWRIO390w2uAlS27gTfDwQOcfIKhu7Wc6bhmOHw==",
+    "n": 16384,
+    "r": 8,
+    "p": 1,
+    "dklen": 64,
+    "username": "administrator",
+    "is_honeypot": true
+  },
+  {
+    "salt": "gj/tVAj42p2F1xSAZ8odXEp1W4JHicLyu2WwFhxPHyo=",
+    "password_hash": "+zX/aB9O01uvkSQFeLsiKk/AabRAyHT49hV3hJkKzGPrGeVxzZCUJK1NmwpRDREak/1fwWYC8vqmRZXls/7wcA==",
+    "n": 16384,
+    "r": 8,
+    "p": 1,
+    "dklen": 64,
     "username": "guest",
-    "salt": "qXnrS1eGPPeMgpifl7Qxtw==",
-    "password_hash": "S/1+Pe3DlNK1ARjmCYVXdTn1HBWH1TB22EjnJzlek2WM3cLNE+7+lALKVh+EHMrlLMI9R6jgpTKD+kLd4Mh5Zw==",
+    "is_honeypot": true
+  },
+  {
+    "salt": "j2v2j76nbWW+0kK0GZOcmiWT2uHJNEhotsJJVDerrt8=",
+    "password_hash": "QtXm/C8chMaXd/oBy/ubvxUfH1n8rhxKkqQN4h5nt579c+HYzbanUaIZ7OXK10zfec+uSEv1D1e4G9/v9yrsEw==",
     "n": 16384,
     "r": 8,
     "p": 1,
     "dklen": 64,
-    "clearance": "unclassified"
+    "username": "backup",
+    "is_honeypot": true
+  },
+  {
+    "salt": "0VsUa/aNDaXmDLOIH0TwSt9hv+hu5pYOke/xORMEXI8=",
+    "password_hash": "2xOwiMFml48rZ/oOL/9SWotqSXadFZSBzG07ehRcEVH51ri9rkTpTPa5ZkovYcdH/aU57CoB451N1k/YvG7Eqg==",
+    "n": 16384,
+    "r": 8,
+    "p": 1,
+    "dklen": 64,
+    "username": "service",
+    "is_honeypot": true
   }
 ]
