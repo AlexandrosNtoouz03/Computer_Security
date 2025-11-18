@@ -444,13 +444,21 @@ class Server(asyncssh.SSHServer):
 async def main():
     os.makedirs(JAIL_ROOT, exist_ok=True)
     print(f"Jail root: {JAIL_ROOT}")
-    await asyncssh.listen(
+    server = await asyncssh.listen(
         LISTEN_HOST, LISTEN_PORT,
         server_host_keys=[HOST_KEY_PATH],  # server identity key
         server_factory=Server              # our auth & session handler
     )
     print(f"SFTP listening on {LISTEN_HOST or '0.0.0.0'}:{LISTEN_PORT} (subsystem '{SFTP_SUBSYSTEM_NAME}')")
-    await asyncio.Event().wait()
+    
+    # Keep the server running indefinitely
+    try:
+        while True:
+            await asyncio.sleep(1)
+    except KeyboardInterrupt:
+        print("\nShutting down server...")
+        server.close()
+        await server.wait_closed()
 
 def main_entry():
     """Entry point for console script"""

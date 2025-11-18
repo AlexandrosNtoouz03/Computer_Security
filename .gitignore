@@ -37,6 +37,11 @@ audit.jsonl
 sftp_root/*
 !sftp_root/.gitkeep
 
+# Sensitive files (keep out of version control)
+PASSWORD_REFERENCE.txt
+*_backup.json
+credentials.txt
+
 # IDE
 .vscode/
 .idea/

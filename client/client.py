@@ -171,8 +171,63 @@ class SFTPClient:
             except Exception as e:
                 print(f"Error: {e}")
 
-async def main(host="127.0.0.1", port=2222, username="test", password="test"):
-    print(f"🔗 Connecting to SFTP server at {host}:{port}")
+def show_available_accounts():
+    """Display available test accounts (passwords not shown for security)"""
+    print("\n📋 Available Test Accounts:")
+    print("┌─────────────┬──────────────┬───────────────────────┬─────────────────────┐")
+    print("│ Username    │ Clearance    │ Role                  │ Notes               │")
+    print("├─────────────┼──────────────┼───────────────────────┼─────────────────────┤")
+    print("│ test        │ internal     │ reader                │ Standard test user  │")
+    print("│ admin       │ secret       │ admin (full access)   │ Administrative user │")
+    print("│ alice       │ confidential │ editor                │ Can read/write      │")
+    print("│ bob         │ internal     │ reader                │ Read-only access    │")
+    print("│ charlie     │ unclassified │ guest                 │ Limited access      │")
+    print("│ demo        │ unclassified │ guest                 │ Demo account        │")
+    print("└─────────────┴──────────────┴───────────────────────┴─────────────────────┘")
+    print("\n🔒 Note: Contact your administrator for account passwords")
+
+def get_connection_details():
+    """Prompt user for connection details"""
+    print("🔐 Secure SFTP Client - Connection Setup")
+    print("=" * 40)
+    
+    # Show available accounts
+    show_available_accounts()
+    
+    # Get connection details
+    print("\n🌐 Enter connection details:")
+    host = input("  Server host [127.0.0.1]: ").strip() or "127.0.0.1"
+    
+    try:
+        port_input = input("  Server port [2222]: ").strip()
+        port = int(port_input) if port_input else 2222
+    except ValueError:
+        port = 2222
+        print("  ⚠️ Invalid port, using default: 2222")
+    
+    username = input("  Username: ").strip()
+    if not username:
+        print("  ❌ Username is required!")
+        return None
+    
+    import getpass
+    password = getpass.getpass("  Password: ")
+    if not password:
+        print("  ❌ Password is required!")
+        return None
+    
+    return host, port, username, password
+
+async def main(host=None, port=None, username=None, password=None):
+    # If no parameters provided, prompt for them
+    if not all([host, port, username, password]):
+        connection_details = get_connection_details()
+        if not connection_details:
+            print("❌ Invalid connection details. Exiting.")
+            return
+        host, port, username, password = connection_details
+    
+    print(f"\n🔗 Connecting to SFTP server at {host}:{port}")
     print(f"👤 Username: {username}")
     
     try:
@@ -195,7 +250,13 @@ async def main(host="127.0.0.1", port=2222, username="test", password="test"):
 
 if __name__ == "__main__":
     try:
-        asyncio.run(main(*sys.argv[1:]))
+        # If command line arguments provided, use them
+        if len(sys.argv) > 1:
+            asyncio.run(main(*sys.argv[1:]))
+        else:
+            # Otherwise, prompt for connection details
+            asyncio.run(main())
     except (KeyboardInterrupt, SystemExit):
+        print("\n👋 Goodbye!")
         pass
 

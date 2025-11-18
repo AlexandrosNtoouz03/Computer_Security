@@ -36,11 +36,13 @@ def test_integration_completed():
     - RBAC: Role-based operation permissions
     - Audit: Complete logging of all access attempts
     
-    Test users available:
-    - test/test (internal clearance, reader role)
-    - admin/admin (secret clearance, admin role)  
-    - editor/editor (confidential clearance, editor role)
-    - guest/guest (unclassified clearance, guest role)
+    Test users available (with secure passwords):
+    - test/Test#2024! (internal clearance, reader role)
+    - admin/Admin$ecur3# (secret clearance, admin role)  
+    - alice/Alice@Work9 (confidential clearance, editor role)
+    - bob/B0b_R3ads! (internal clearance, reader role)
+    - charlie/Gu3st&Pass (unclassified clearance, guest role)
+    - demo/D3mo#Test7 (unclassified clearance, guest role)
     """
     # Import to verify integration
     from main import Server, SFTPSession
@@ -58,8 +60,8 @@ def test_integration_completed():
     assert authorize("test", "write", "/") == False
     assert authorize("test", "read", "/confidential") == False
     
-    # Test that authentication works  
-    assert authenticate("test", "test") == True
+    # Test that authentication works with new secure passwords
+    assert authenticate("test", "Test#2024!") == True
     assert authenticate("test", "wrong") == False
     
     print("✅ SFTP Server Authorization Integration: COMPLETE")
