@@ -1,0 +1,62 @@
+[build-system]
+requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "computer-security-sftp"
+version = "1.0.0"
+description = "Secure SFTP Server with Multi-Model Authorization (DAC + MAC + RBAC)"
+authors = [
+    {name = "Computer Security Group Assignment", email = "group@student.maastrichtuniversity.nl"}
+]
+license = {text = "Educational Use Only"}
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Education", 
+    "Topic :: Security",
+    "Topic :: System :: Networking",
+    "Topic :: Communications :: File Sharing",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9", 
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Operating System :: OS Independent",
+]
+keywords = [
+    "sftp", "security", "authentication", "authorization", 
+    "dac", "mac", "rbac", "bell-lapadula", "computer-security",
+    "ssh", "file-transfer", "access-control"
+]
+dependencies = [
+    "asyncssh",
+    "pytest",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "pytest-asyncio", "black", "flake8"]
+docs = ["sphinx", "sphinx-rtd-theme"]
+
+[project.urls]
+Homepage = "https://github.com/AlexandrosNtoouz03/Computer_Security"
+"Bug Reports" = "https://github.com/AlexandrosNtoouz03/Computer_Security/issues"
+Source = "https://github.com/AlexandrosNtoouz03/Computer_Security"
+Documentation = "https://github.com/AlexandrosNtoouz03/Computer_Security/blob/main/README.md"
+
+[project.scripts]
+computer-security-sftp-server = "main:main_entry"
+computer-security-sftp-client = "client.client:main"
+
+[tool.setuptools.packages.find]
+include = ["server*", "client*", "tests*"]
+
+[tool.setuptools.package-data]
+"*" = ["*.md", "*.txt", "*.json", "*.csv"]
+data = ["*.json", "*.csv"]
+server = ["*.py"]
+client = ["*.py"] 
+tests = ["*.py"]

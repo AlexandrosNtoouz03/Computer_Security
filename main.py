@@ -3,14 +3,8 @@ import asyncio, asyncssh, os, struct, stat
 import logging, traceback
 from server.policy import authorize
 
-# Console debug logging for AsyncSSH
-logging.basicConfig(
-    level=logging.DEBUG,  # or INFO
-    format="%(asctime)s %(levelname)s %(name)s: %(message)s"
-)
-logging.getLogger("asyncssh").setLevel(logging.DEBUG)
-# Optional: quiet down noisy asyncio internals
-logging.getLogger("asyncio").setLevel(logging.INFO)
+# Basic logging setup
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s: %(message)s")
 
 
 HOST_KEY_PATH = './ssh_host_ed25519_key'
@@ -458,8 +452,12 @@ async def main():
     print(f"SFTP listening on {LISTEN_HOST or '0.0.0.0'}:{LISTEN_PORT} (subsystem '{SFTP_SUBSYSTEM_NAME}')")
     await asyncio.Event().wait()
 
-if __name__ == "__main__":
+def main_entry():
+    """Entry point for console script"""
     try:
         asyncio.run(main())
     except (KeyboardInterrupt, SystemExit):
         pass
+
+if __name__ == "__main__":
+    main_entry()
