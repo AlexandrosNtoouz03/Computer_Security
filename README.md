@@ -78,25 +78,6 @@ pip install -r requirements.txt
 # - pytest (testing framework)
 ```
 
-### **🎯 Main Launcher (Easiest)**
-
-#### **🚀 Comprehensive System Launcher**
-```bash
-python launcher.py
-```
-**All-in-one menu with options for:**
-- 🚀 Interactive server startup
-- 🖥️ Interactive client connection
-- 🧪 System testing and validation
-- 🔧 Utilities (SSH keys, passwords, audit logs)
-- 📚 Documentation viewing
-
-#### **Windows Users:**
-```cmd
-launch_server.bat    # Start server with dependency checking
-launch_client.bat    # Start client with dependency checking
-```
-
 ### **Option 1: Interactive Setup**
 
 #### **Interactive Server Launcher**
@@ -119,8 +100,9 @@ python start_client.py
 ### **Option 2: Direct Launch**
 
 #### **1. Generate SSH Host Key**
+If the file `ssh_host_ed25519_key` is missing, generate one manually:
 ```bash
-python generate_ssh_key.py
+ssh-keygen -t ed25519 -f ssh_host_ed25519_key
 ```
 
 #### **2. Start SFTP Server**
@@ -256,11 +238,6 @@ new_role,write,0
 ```
 
 ## 🐛 **Troubleshooting**
-
-### **"SSH host key not found"**
-```bash
-python generate_ssh_key.py
-```
 
 ### **"Port 2222 already in use"**
 ```bash
